@@ -3,6 +3,11 @@
 <h1>{%block title%}Send mails{%endblock%}</h1>
 {% endblock %}
 
+{% block action %}
+    <a class="button" href="#">New Mail</a>
+{% endblock %}
+
+
 {% block content %}
 <ul class="mail-list">
     {% for mail in mails %}
