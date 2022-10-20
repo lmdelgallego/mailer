@@ -1,7 +1,19 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
+{% block header %}
+<h1>{%block title%}Send mails{%endblock%}</h1>
+{% endblock %}
 
 {% block content %}
-    <h1>Home</h1>
-    <p>Welcome to the home page.</p>
+<ul>
+    {% for mail in mails %}
+        <li class="mail">
+            <div>
+                <span class="email">{{mail['email']}}</span>
+                <span class="subject">{{mail['subject']}}</span>
+                <hr>
+                <p class="mail-content">{{mail['content']}}</p>
+            </div>
+        </li>
+    {% endfor %}
+</ul>
 {% endblock %}
