@@ -70,6 +70,7 @@ ul.mail-list {
 }
 
 .button {
+  border: none;
   background-color: #674dd4;
   color: #fff;
   align-self: center;
