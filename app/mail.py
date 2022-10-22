@@ -1,4 +1,12 @@
-from flask import Blueprint, flash, render_template, request, jsonify
+from flask import (
+    Blueprint,
+    current_app,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
 from app.db import get_db
 
 bp = Blueprint("mail", __name__, url_prefix="/")
@@ -32,17 +40,18 @@ def create():
             errors.append("Content is required.")
 
         if len(errors) == 0:
-            pass
+            cursor.execute(
+                "INSERT INTO email (email, subject, content) VALUES (%s, %s, %s)",
+                (email, subject, content),
+            )
+            db.commit()
+            return redirect(url_for("mail.index"))
         else:
             for error in errors:
                 flash(error)
 
-        # cursor.execute(
-        #     "INSERT INTO email (email, subject, content) VALUES (%s, %s, %s)",
-        #     (email, subject, content),
-        # )
-        # db.commit()
-
-        # return jsonify({"success": True})
-
     return render_template("mails/create.html")
+
+
+def send(to, subject, content):
+    sg = sendgrid.SendGridAPIClient(api_key=current_app.config["SENDGRID_API_KEY"])
