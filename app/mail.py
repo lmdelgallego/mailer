@@ -8,6 +8,8 @@ from flask import (
     url_for,
 )
 from app.db import get_db
+import sendgrid
+from sendgrid.helpers.mail import *
 
 bp = Blueprint("mail", __name__, url_prefix="/")
 
@@ -25,7 +27,6 @@ def index():
 @bp.route("/create", methods=["GET", "POST"])
 def create():
     if request.method == "POST":
-        db, cursor = get_db()
         errors = []
 
         email = request.form["email"]
@@ -40,6 +41,8 @@ def create():
             errors.append("Content is required.")
 
         if len(errors) == 0:
+            send(email, subject, content)
+            db, cursor = get_db()
             cursor.execute(
                 "INSERT INTO email (email, subject, content) VALUES (%s, %s, %s)",
                 (email, subject, content),
@@ -54,4 +57,11 @@ def create():
 
 
 def send(to, subject, content):
-    sg = sendgrid.SendGridAPIClient(api_key=current_app.config["SENDGRID_API_KEY"])
+    api_key = current_app.config["SENDGRID_API_KEY"]
+    sg = sendgrid.SendGridAPIClient(api_key=api_key)
+    from_email = Email(current_app.config["FROM_EMAIL"])
+    to_email = To(to)
+    content = Content("text/plain", content)
+    mail = Mail(from_email, to_email, subject, content)
+    response = sg.client.mail.send.post(request_body=mail.get())
+    print(response.status_code)
