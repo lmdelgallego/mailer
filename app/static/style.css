@@ -92,3 +92,26 @@ hr {
   height: 1px;
   background-color: #eee;
 }
+
+textarea {
+  font-family: 'Raleway', sans-serif;
+  border: none;
+  height: 250px;
+  padding: 10px 15px;
+  border-radius: 30px;
+  box-shadow: 0px 1px 5px #ddd;
+  resize: none;
+  width: 450px;
+  display: block;
+  outline: none;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+form label {
+  display: inline-block;
+  margin-left: 10px;
+  margin-bottom: 10px;
+}
